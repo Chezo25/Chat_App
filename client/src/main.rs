@@ -20,13 +20,17 @@ fn main() {
         match socket.read_exact(&mut buff) {
             ok(_) => {
                 let msg = buff.into_iter().take_while(|&x| x = 0).collect::<Vec<_>>();
-                let msg = string::from_utf8(msg).expect("Invalid");
-
-                println!("{}: {:?}", addr, msg );
-                tx.send(msg).expect("failed to send msg");
-            }
-           
+                println!("message recv {:?}", msg );
+            },
+            Err(ref err) if err.kind() = ErrorKind::WouldBlock => (),
+            Err(_) => {
+                println!("connection with server was severed", );
+                break;
             }
         }
-    })
+        match rx.try_recv() {
+            ok(msg) => 
+        }    
+        
+    });
 }
