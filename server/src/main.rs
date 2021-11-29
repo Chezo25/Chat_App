@@ -15,7 +15,9 @@ fn main() {
     loop {
         if let ok((mut socket, addr)) = server.accept() { //  this allows the connection to this server
             println!("Client {} connected", addr );
+
             let tx = tx.clone();
+            clients.push(socket.try_clone().expect("failed to clone cli"));
         }
     }
 }
