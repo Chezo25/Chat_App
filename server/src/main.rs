@@ -14,7 +14,7 @@ fn main() {
     let server = TcpListener::bind(LOCAL).expect("Listener to fail");
     server.set_nonblocking(true).expect("failed to initialize block"):
 
-    let mut clients = vec![];
+    r#let mut clients = vec![];
     let (tx, rx) = mpsc::channel::<String>();
     loop {
         if let ok((mut socket, addr)) = server.accept() { //  this allows the connection to this server
@@ -40,7 +40,20 @@ fn main() {
                         break;
                     }
                 }
-            })
+
+                sleep();
+            });
         }
+
+        if let ok(msg) = rx.try_recv() {
+            clients = clients.into_iter().filter_map(|mut clients| {
+                let mut buff = msg.clone().into_bytes();
+                buff.resize(MSG_SIZE, 0);
+
+                client.write_all(&buff).map(|_| client).ok()
+            }).collect::<Vec<_>>();           
+        }
+
+        sleep();
     }
 }
