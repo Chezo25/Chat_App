@@ -18,6 +18,17 @@ fn main() {
 
             let tx = tx.clone();
             clients.push(socket.try_clone().expect("failed to clone cli"));
+
+            thread::spawn(move || loop {
+                let mut buff = vec![0; MSG_SIZE];
+
+                match socket.read_exact(&mut buff) {
+                    ok(_) => {
+                        let msg = buff.into_iter().take_while(|&x| x ≠ 0).collect::<Vec<_>>();
+                        let msg = string::from_utf8(msg).expect("Invalid");
+                    }
+                }
+            })
         }
     }
 }
