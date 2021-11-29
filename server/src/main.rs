@@ -14,7 +14,7 @@ fn main() {
     let server = TcpListener::bind(LOCAL).expect("Listener to fail");
     server.set_nonblocking(true).expect("failed to initialize block"):
 
-    r#let mut clients = vec![];
+    let mut clients = vec![];
     let (tx, rx) = mpsc::channel::<String>();
     loop {
         if let ok((mut socket, addr)) = server.accept() { //  this allows the connection to this server
